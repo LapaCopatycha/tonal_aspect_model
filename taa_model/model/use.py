@@ -8,7 +8,7 @@ from taa_model.model.preparation import prep_review
 
 
 def mark_review(review):
-    model_path = f"{BASE_DIR}/taa_model/model/model_rnn_bidir.tar"
+    model_path = f'{BASE_DIR}/taa_model/model_history/model_lstm_bidir.tar'
     st = torch.load(model_path, weights_only=True)
     model.load_state_dict(st)
 
@@ -18,8 +18,6 @@ def mark_review(review):
         reader = csv.reader(f, delimiter='\t')
         header = list(reader)[0]
 
-    # phrase_lst = review.lower().split()
-    # phrase_lst = [torch.tensor(navec[w]) for w in phrase_lst if w in navec]
     phrase_lst = prep_review(phrase=review, navec_emb=navec)
     _data_batch = torch.stack(phrase_lst)
 
@@ -27,10 +25,6 @@ def mark_review(review):
     predict = model(_data_batch.unsqueeze(0)).squeeze(0)
     p = F.sigmoid(predict)
     y = (p>0.5).int()
-
-    print(header)
-    print(predict)
-    print((p>0.5).int())
 
     return {name: int(y[i]) for i, name in enumerate(header[:-1])}
 

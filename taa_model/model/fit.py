@@ -6,6 +6,8 @@ import torch.optim as optim
 
 from metrics import model_eval
 from model import PhraseDataset, model, navec
+from paths import BASE_DIR
+
 
 def fit(epochs=10, p_valid=0.3, save_model=False):
 
@@ -58,7 +60,7 @@ def fit(epochs=10, p_valid=0.3, save_model=False):
 
     if save_model is True:
         st = model.state_dict()
-        torch.save(st, 'model_rnn_bidir.tar') # Изменить путь
+        torch.save(st, f'{BASE_DIR}/taa_model/model_history/model_lstm_bidir.tar') # Изменить путь
 
     return {'loss_lst_val' : loss_lst_val, 'loss_lst' : loss_lst, 'hamming_loss_lst' : hamming_loss_lst,
             'modifed_hamming_loss_lst':modifed_hamming_loss_lst}
