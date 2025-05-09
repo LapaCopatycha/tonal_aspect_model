@@ -9,8 +9,6 @@ import torch.nn.functional as F
 
 from paths import BASE_DIR
 from taa_model.model.preparation import prep_review
-# Исправить ошибку с подготовкой
-
 
 class PhraseDataset(data.Dataset):
     def __init__(self, path, navec_emb, batch_size=8):
@@ -20,22 +18,15 @@ class PhraseDataset(data.Dataset):
         with open(path, 'r', encoding='utf-8') as f:
             reader = csv.reader(f, delimiter='\t')
             phrase_all = list(reader)[1:]
-
-            # phrase_true = f.readlines()
             self._clear_phrase(phrase_all)
 
         self.phrase_lst = [_pr for _pr in phrase_all if len(_pr[-1]) > 1] # Добавил чтобы не было однословных отзывов
         self.phrase_lst.sort(key=lambda _x: len(_x[-1]))
         self.dataset_len = len(self.phrase_lst)
 
-    # Удалить лишние пробелы между словами елси они существуют
     def _clear_phrase(self, p_lst):
         for _i, _p in enumerate(p_lst):
             _words = prep_review(phrase=_p[-1], navec_emb=self.navec_emb)
-            # _p[-1] = _p[-1].lower().replace('\ufeff', '').strip()
-            # _p[-1] = re.sub(r'[^А-яA-z- ]', '', _p[-1])
-            # _words = _p[-1].split()
-            # _words = [w for w in _words if w in self.navec_emb]
             p_lst[_i][-1] = _words
 
     def __getitem__(self, item):
@@ -54,7 +45,6 @@ class PhraseDataset(data.Dataset):
             length = len(phrase[-1])
 
             for k in range(max_length):
-                # t = torch.tensor(self.navec_emb[phrase[-1][k]], dtype=torch.float32) if k < length else torch.zeros(300)
                 t = phrase[-1][k] if k < length else torch.zeros(300)
                 words_emb.append(t)
 
@@ -81,14 +71,9 @@ class WordsRNN(nn.Module):
     def forward(self, x):
         x, (h, c) = self.rnn(x)
         hc = torch.cat((h[-2, :, :], h[-1, :, :], c[-2, :, :], c[-1, :, :]), dim=1)
-        # x, (h, c) = self.rnn(x)
-        # hc = torch.cat((h[-1, :, :], c[-1, :, :]), dim=1)
         y = self.out(hc)
-        # l1 = self.out(hc)
-        # y = F.relu(l1)
         return y
 
-# path = '../emb/navec_hudlit_v1_12B_500K_300d_100q.tar'
 path = f'{BASE_DIR}/taa_model/emb/navec_hudlit_v1_12B_500K_300d_100q.tar'
 navec = Navec.load(path)
 
