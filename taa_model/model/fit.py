@@ -18,9 +18,7 @@ def fit(epochs=10, p_valid=0.3, save_model=False):
     optimizer = optim.Adam(params=model.parameters(), lr=0.001, weight_decay=0.001) # Мб его тоже заменить
     loss_func = nn.CrossEntropyLoss()
 
-    # epochs = 10
 
-    # best_loss = 1000000000
     loss_lst_val = [] # список значений потерь при валидации
     loss_lst = [] # список значений потерь при обучении
     hamming_loss_lst = []
@@ -57,11 +55,6 @@ def fit(epochs=10, p_valid=0.3, save_model=False):
         loss_lst_val.append(Q_val)
         hamming_loss_lst.append(hamming_loss)
         modifed_hamming_loss_lst.append(modifed_hamming_loss)
-
-        # if best_loss > loss_mean * 1.1:
-        #     best_loss = loss_mean
-        #     st = model.state_dict()
-        #     torch.save(st, f'../models_history/model_rnn_bidir_{_e}.tar')
 
     if save_model is True:
         st = model.state_dict()
