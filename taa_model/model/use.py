@@ -15,8 +15,8 @@ def mark_review(review):
     model.load_state_dict(st)
 
     # Вообще надо подумать как это закешировать так на загрузку этих заголовков будет тратиться очень много времени
-    headers_path = f'{BASE_DIR}/taa_model/data/headers.json'
-    with open(headers_path, 'r', encoding='utf-8') as f:
+    header_path = f'{BASE_DIR}/taa_model/data/header.json'
+    with open(header_path, 'r', encoding='utf-8') as f:
         header = json.load(f)
 
     phrase_lst = prep_review(phrase=review, navec_emb=navec)
@@ -33,8 +33,8 @@ def mark_review_lst (reviews:list):
     return [mark_review(review) for review in reviews]
 
 # phrase = "Этот телефон не работает. Батарейку не держит. Упакованно ужасно"
-phrase = "Этот телефон работает. Батарейку держит. Упакованно круто"
-print(mark_review(review=phrase))
+# phrase = "Этот телефон работает. Батарейку держит. Упакованно круто"
+# print(mark_review(review=phrase))
 
 # Нужно будет подумать над функцей активации так как есть проблема в том что два противоречивых класса могут выпасть
 # Если оба больше 0.5 выбирается масксимальный из двух

@@ -1,6 +1,6 @@
+import json
 import re
 import csv
-import json
 
 from navec import Navec
 import torch
@@ -11,8 +11,6 @@ import torch.nn.functional as F
 from paths import BASE_DIR
 from taa_model.model.preparation import prep_review
 
-
-
 class PhraseDataset(data.Dataset):
     def __init__(self, path, navec_emb, batch_size=8):
         self.navec_emb = navec_emb
@@ -22,16 +20,16 @@ class PhraseDataset(data.Dataset):
             reader = csv.reader(f, delimiter='\t')
             dataset = list(reader)
             header = dataset[0].copy()
-            phrase_all = dataset[1:].copy() # Нужно ли копировать
-            self.save_header(header=header)
+            phrase_all = dataset[1:].copy()
+            self._save_header(header)
             self._clear_phrase(phrase_all)
 
         self.phrase_lst = [_pr for _pr in phrase_all if len(_pr[-1]) > 1] # Добавил чтобы не было однословных отзывов
         self.phrase_lst.sort(key=lambda _x: len(_x[-1]))
         self.dataset_len = len(self.phrase_lst)
 
-    def save_header(self, header):
-        with open('../data/headers.json', 'w') as file:
+    def _save_header(self, header):
+        with open('../data/header.json', 'w') as file:
             json.dump(header, file)
 
     def _clear_phrase(self, p_lst):
