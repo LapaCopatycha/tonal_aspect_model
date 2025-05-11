@@ -5,7 +5,10 @@ import torch.nn.functional as F
 
 from paths import BASE_DIR
 from taa_model.model.model import model, navec
-from taa_model.model.preparation import prep_review
+from taa_model.model.preparation import prep_review, words_to_emb
+
+def result_to_dict(y, header):
+    return {name: int(y[i]) for i, name in enumerate(header[:-1])}
 
 
 def mark_review(review):
@@ -18,22 +21,26 @@ def mark_review(review):
     with open(header_path, 'r', encoding='utf-8') as f:
         header = json.load(f)
 
-    phrase_lst = prep_review(phrase=review, navec_emb=navec)
-    _data_batch = torch.stack(phrase_lst)
+    phrase_lst = prep_review(phrase=review)
 
+    if len(phrase_lst) < 2 :
+        return result_to_dict(y=([0] * len(header)), header=header)
+
+    phrase_emb_lst = words_to_emb(words=phrase_lst, navec_emb=navec)
+
+    if len(phrase_emb_lst) < 2 :
+        return result_to_dict(y=([0] * len(header)), header=header)
+
+    _data_batch = torch.stack(phrase_emb_lst)
 
     predict = model(_data_batch.unsqueeze(0)).squeeze(0)
     p = F.sigmoid(predict)
     y = (p>0.5).int()
 
-    return {name: int(y[i]) for i, name in enumerate(header[:-1])}
+    return result_to_dict(y=y, header=header)
 
 def mark_review_lst (reviews:list):
     return [mark_review(review) for review in reviews]
-
-# phrase = "Этот телефон не работает. Батарейку не держит. Упакованно ужасно"
-# phrase = "Этот телефон работает. Батарейку держит. Упакованно круто"
-# print(mark_review(review=phrase))
 
 # Нужно будет подумать над функцей активации так как есть проблема в том что два противоречивых класса могут выпасть
 # Если оба больше 0.5 выбирается масксимальный из двух
