@@ -8,7 +8,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from paths import BASE_DIR
-from taa_model.model.preparation import prep_review
+from taa_model.model.preparation import prep_review, words_to_emb
+
 
 class PhraseDataset(data.Dataset):
     def __init__(self, path, navec_emb, batch_size=8):
@@ -33,7 +34,8 @@ class PhraseDataset(data.Dataset):
 
     def _clear_phrase(self, p_lst):
         for _i, _p in enumerate(p_lst):
-            _words = prep_review(phrase=_p[-1], navec_emb=self.navec_emb)
+            _words = prep_review(phrase=_p[-1])
+            _words_emb = words_to_emb(words=_words, navec_emb=self.navec_emb)
             p_lst[_i][-1] = _words
 
     def __getitem__(self, item):
