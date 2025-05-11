@@ -1,5 +1,4 @@
 import json
-import re
 import csv
 
 from navec import Navec
