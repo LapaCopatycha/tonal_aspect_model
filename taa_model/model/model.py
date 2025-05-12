@@ -7,7 +7,7 @@ import torch.utils.data as data
 import torch.nn as nn
 import torch.nn.functional as F
 
-from config import BASE_DIR
+from configurations import BASE_DIR
 from taa_model.model.preparation import prep_review, words_to_emb
 
 
