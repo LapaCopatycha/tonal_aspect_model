@@ -6,7 +6,7 @@ import torch.optim as optim
 
 from metrics import model_eval
 from model import PhraseDataset, model, navec
-from paths import BASE_DIR
+from config import BASE_DIR
 
 
 def fit(epochs=10, p_valid=0.3, save_model=False):

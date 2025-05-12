@@ -3,7 +3,7 @@ import json
 import torch
 import torch.nn.functional as F
 
-from paths import BASE_DIR
+from config import BASE_DIR
 from taa_model.model.model import model, navec
 from taa_model.model.preparation import prep_review, words_to_emb
 
