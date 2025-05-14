@@ -1,7 +1,5 @@
 import json
-
 import torch
-import torch.nn.functional as F
 
 from configurations import BASE_DIR
 from taa_model.model.model import model, navec
@@ -34,8 +32,7 @@ def mark_review(review):
     _data_batch = torch.stack(phrase_emb_lst)
 
     predict = model(_data_batch.unsqueeze(0)).squeeze(0)
-    p = F.sigmoid(predict)
-    y = (p>0.5).int()
+    y = (predict>0.5).int()
 
     return result_to_dict(y=y, header=header)
 
