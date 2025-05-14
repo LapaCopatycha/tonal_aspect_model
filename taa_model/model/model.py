@@ -29,7 +29,7 @@ class PhraseDataset(data.Dataset):
         self.dataset_len = len(self.phrase_lst)
 
     def _save_header(self, header):
-        with open('../data/header.json', 'w') as file:
+        with open(f'{BASE_DIR}/taa_model/data/header.json', 'w') as file:
             json.dump(header, file)
 
     def _clear_phrase(self, p_lst):

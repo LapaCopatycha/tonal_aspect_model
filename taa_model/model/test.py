@@ -2,9 +2,10 @@ import csv
 import numpy as np
 
 from taa_model.model.use import mark_review
+from configurations import BASE_DIR
 
 def t_model():
-    path = '../data/test.csv'
+    path = f'{BASE_DIR}/taa_model/data/test.csv'
     with open(path, 'r', encoding='utf-8') as f:
         reader = csv.reader(f, delimiter='\t')
         dataset = list(reader)

@@ -4,14 +4,14 @@ import torch.utils.data as data
 import torch.nn as nn
 import torch.optim as optim
 
-from metrics import model_eval
-from model import PhraseDataset, model, navec
+from taa_model.model.metrics import model_eval
+from taa_model.model.model import PhraseDataset, model, navec
 from configurations import BASE_DIR
 
-
+# Добавить параметр make_valid
 def fit(epochs=10, p_valid=0.3, save_model=False):
 
-    p_dataset = PhraseDataset("../data/train.csv", navec)
+    p_dataset = PhraseDataset(f"{BASE_DIR}/taa_model/data/train.csv", navec)
     d_train , d_valid = data.random_split(p_dataset, [1 - p_valid, p_valid])
     train_data = data.DataLoader(d_train, batch_size=1, shuffle=True)
     train_data_val = data.DataLoader(d_valid, batch_size=1, shuffle=False)
