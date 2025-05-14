@@ -76,11 +76,12 @@ class WordsRNN(nn.Module):
         self.out_features = out_features
 
         self.rnn = nn.LSTM(in_features, self.hidden_size, batch_first=True, bidirectional=True, dropout=0.5, num_layers=1)
-        self.out = nn.Linear(self.hidden_size * 4, out_features)
+        self.ln = nn.Linear(self.hidden_size * 4, out_features)
     def forward(self, x):
         x, (h, c) = self.rnn(x)
         hc = torch.cat((h[-2, :, :], h[-1, :, :], c[-2, :, :], c[-1, :, :]), dim=1)
-        y = self.out(hc)
+        out = self.ln(hc)
+        y = F.sigmoid(out)
         return y
 
 path = f'{BASE_DIR}/taa_model/emb/navec_hudlit_v1_12B_500K_300d_100q.tar'
