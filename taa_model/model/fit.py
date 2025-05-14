@@ -11,7 +11,7 @@ from configurations import BASE_DIR
 
 def fit(epochs=10, p_valid=0.3, save_model=False):
 
-    p_dataset = PhraseDataset("../data/prepared_reviews.csv", navec)
+    p_dataset = PhraseDataset("../data/train.csv", navec)
     d_train , d_valid = data.random_split(p_dataset, [1 - p_valid, p_valid])
     train_data = data.DataLoader(d_train, batch_size=1, shuffle=True)
     train_data_val = data.DataLoader(d_valid, batch_size=1, shuffle=False)
@@ -64,5 +64,3 @@ def fit(epochs=10, p_valid=0.3, save_model=False):
 
     return {'loss_lst_val' : loss_lst_val, 'loss_lst' : loss_lst, 'hamming_loss_lst' : hamming_loss_lst,
             'modifed_hamming_loss_lst':modifed_hamming_loss_lst}
-
-results = fit(epochs=10, p_valid=0.3, save_model=True)
