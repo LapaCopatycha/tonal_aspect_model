@@ -7,6 +7,8 @@ def model_eval(model, data, loss_func):
     Q_val = 0
     count_val = 0
 
+    if loss_func is False:
+        Q_val = None
     total_incorrect_hl = 0
     total_incorrect_mhl = 0
     total_samples = 0
@@ -14,17 +16,21 @@ def model_eval(model, data, loss_func):
     for x, y in data:
         with torch.no_grad():
             predict = model(x.squeeze(0)).squeeze(0)
-            loss = loss_func(predict, y.squeeze(0))
-            Q_val += loss.item()
-            count_val += 1
 
-            total_incorrect_hl += ((F.sigmoid(predict)>0.5).int() != y.squeeze(0)).sum().item()
-            total_incorrect_mhl += (features_activation_f(F.sigmoid(predict)) != y.squeeze(0)).sum().item()
+            if loss_func is not False:
+                loss = loss_func(predict, y.squeeze(0))
+                Q_val += loss.item()
+                count_val += 1
+
+
+            total_incorrect_hl += (((predict)>0.5).int() != y.squeeze(0)).sum().item()
+            total_incorrect_mhl += (features_activation_f(predict) != y.squeeze(0)).sum().item()
             total_samples += y.squeeze(0).size(dim=0) * y.squeeze(0).size(dim=1)
             # Как то топорно
             # мб есть лучше посчитать колличество элементов
 
-    Q_val /= count_val
+    if loss_func is not False:
+        Q_val /= count_val
     hamming_loss = total_incorrect_hl / total_samples
     modifed_hamming_loss = total_incorrect_mhl / total_samples
     return {'Q_val':Q_val, 'hamming_loss' : hamming_loss, 'modifed_hamming_loss' : modifed_hamming_loss}
