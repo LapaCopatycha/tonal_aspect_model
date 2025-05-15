@@ -14,26 +14,27 @@
    ```python
    pip install -r dev-requirements.txt
    ```
-5. Скачать модель эмбеддингов по ссылке и поместить ее в директорию: `/taa_model/emb/`
-6. Скачать размеченные данные для обучения по ссылке и поместить их в директорию: `/taa_model/data/`
-7. Подготововить данные используя jupyter notebook
-8. Обучить модель использюя jupyter notebook
-9. При желание можете эксперементировать с моделями, с обработкой данных. Just as you wish.
+5. Скачать модель эмбеддингов по [ссылке](https://github.com/LapaCopatycha/tonal_aspect_model/releases/download/v1.0.0-alpha/navec_hudlit_v1_12B_500K_300d_100q.tar) и поместить ее в директорию: `/taa_model/emb/`
+6. Скачать размеченные данные для обучения по [ссылке](https://github.com/LapaCopatycha/tonal_aspect_model/releases/download/v1.0.0-alpha/train_reviews.csv) и тестирования по [ссылке](https://github.com/LapaCopatycha/tonal_aspect_model/releases/download/v1.0.0-alpha/test_reviews.csv) и поместить их в директорию: `/taa_model/data/`
+7. Подготововить данные используя jupyter notebook eda, скачать его можно по [ссылке](https://github.com/LapaCopatycha/tonal_aspect_model/releases/download/v1.0.0-alpha/eda.ipynb) и поместить в директорию: `/taa_model/model/notebooks/`
+8. Обучить модель использюя jupyter notebook model fit, скачать его можно по [ссылке](https://github.com/LapaCopatycha/tonal_aspect_model/releases/download/v1.0.0-alpha/model_fit.ipynb) и поместить в директорию: `/taa_model/model/notebooks/`
+9. При желание можете эксперементировать с моделями, с обработкой данных. As you wish.
 
 ### Для использования
 Для испольщование модели, как docker контайнер нужно выполнить следующие действия.
 1. Скачать данный репозиторий
-2. Скачать модель эмбеддингов по ссылке и поместить ее в директорию: `/taa_model/emb/`
-3. Обучить самостоятельно модель или скачать её по ссылке и поместить в директорию: `/taa_model/model_history/`
-4. Дальше требуется упаковать программу в docker image. Для этого в консоли, где находится проект нужно выполнить следующий код.
+2. Скачать модель эмбеддингов по [ссылке](https://github.com/LapaCopatycha/tonal_aspect_model/releases/download/v1.0.0-alpha/navec_hudlit_v1_12B_500K_300d_100q.tar) и поместить ее в директорию: `/taa_model/emb/`
+3. Обучить самостоятельно модель или скачать её по [ссылке](https://github.com/LapaCopatycha/tonal_aspect_model/releases/download/v1.0.0-alpha/model_lstm_bidir.tar) и поместить в директорию: `/taa_model/model_history/`
+4. Скачать название характеристик по [ссылке](https://github.com/LapaCopatycha/tonal_aspect_model/releases/download/v1.0.0-alpha/header.json) и поместить их в директорию: `/taa_model/data/`
+5. Дальше требуется упаковать программу в docker image. Для этого в консоли, где находится проект нужно выполнить следующий код.
    ```
    docker buildx build -t taa-ml .
    ```
-5. Далее нужно запустить контейнер из image, выполнив в консоле следующий код:
+6. Далее нужно запустить контейнер из image, выполнив в консоле следующий код:
    ```
    docker run -it -p 80:80 taa-ml
    ```
-6. Теперь можно отправлять запросы на разметку отзывов к api по адресу: `http://0.0.0.0:80/mark_review`
+7. Теперь можно отправлять запросы на разметку отзывов к api по адресу: `http://0.0.0.0:80/mark_review`
 
 
 ## Устройство модели
