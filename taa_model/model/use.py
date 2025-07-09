@@ -10,7 +10,7 @@ def result_to_dict(y, header):
 
 
 def mark_review(review):
-    model_path = f'{BASE_DIR}/taa_model/model_history/model_lstm_bidir.tar'
+    model_path = f'{BASE_DIR}/taa_model/model_history/rnn/model_lstm_bidir.tar'
     st = torch.load(model_path, weights_only=True)
     model.load_state_dict(st)
 
