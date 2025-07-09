@@ -47,11 +47,14 @@ def fit(epochs=10, p_valid=0.3, save_model=False):
         # Валидация
         model_val = model_eval(model=model, data=train_data_val, loss_func=loss_func)
         Q_val = model_val['Q_val']
-        hamming_loss = model_val['hamming_loss']
-        modifed_hamming_loss =  model_val['modifed_hamming_loss']
+        hamming_loss = 1 - model_val['accuracy']
+        modifed_hamming_loss = 1 - model_val['modified_accuracy']
+        precision = model_val['precision']
+        recall = model_val['recall']
 
         print(f" | loss_mean={loss_mean:.3f}, Q_val={Q_val:.3f}, hamming_loss={hamming_loss:.3f}"
-              f", modifed_hamming_loss={modifed_hamming_loss:.3f}")
+              f", modifed_hamming_loss={modifed_hamming_loss:.3f}"
+              f", precision={precision:.3f}, recall={recall:.3f}")
 
         loss_lst.append(loss_mean)
         loss_lst_val.append(Q_val)
